@@ -187,8 +187,8 @@ export default function StripPage() {
               <div
                 className="relative rounded-2xl overflow-hidden"
                 style={{
-                  width: "min(248px, 62vw)",
-                  aspectRatio: "1080/1920",
+                  width: "min(220px, 55vw)",
+                  aspectRatio: "1080/2160",
                   border: "3px solid white",
                   boxShadow:
                     "0 0 0 1px rgba(232,201,154,0.4), 0 12px 50px rgba(128,0,32,0.2), 0 4px 14px rgba(0,0,0,0.08)",
@@ -198,7 +198,7 @@ export default function StripPage() {
                   src={session.stripDataUrl}
                   alt="Your photostrip"
                   fill
-                  className="object-cover"
+                  className="object-contain"
                   unoptimized
                 />
               </div>

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { usePhotoboothStore } from "@/store/photoboothStore";
 import { FloatingBackground } from "@/components/FloatingBackground";
@@ -22,6 +23,30 @@ export default function WelcomePage() {
   return (
     <main className="h-full w-full flex flex-col items-center justify-between relative overflow-hidden bg-animated">
       <FloatingBackground />
+
+      {/* Couple photo — fades in from bottom as decorative background */}
+      <div
+        className="absolute bottom-0 left-0 right-0 overflow-hidden pointer-events-none"
+        style={{ height: "46%" }}
+      >
+        {/* Gradient fade top-to-transparent so photo blends into background */}
+        <div
+          className="absolute inset-0 z-10"
+          style={{
+            background:
+              "linear-gradient(to bottom, #F8F4ED 0%, rgba(248,244,237,0.72) 28%, rgba(248,244,237,0.18) 68%, transparent 100%)",
+          }}
+        />
+        <Image
+          src="/pic.jpg"
+          alt=""
+          fill
+          className="object-cover"
+          style={{ objectPosition: "center 18%", opacity: 0.38 }}
+          priority
+          unoptimized
+        />
+      </div>
 
       {/* Top + bottom accent lines */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-champagne-dark/60 to-transparent pointer-events-none" />
