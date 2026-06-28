@@ -10,40 +10,34 @@ export interface StripResult {
   filename: string;
 }
 
-// Output dimensions — must match TEMPLATE.png exactly
 const STRIP_W = 1080;
 const STRIP_H = 2160;
 
-// Horizontal padding for photos
-const PAD_X = 60;
-const PHOTO_W = STRIP_W - PAD_X * 2; // 960px
+const PAD_X = 100;
+const PHOTO_W = STRIP_W - PAD_X * 2; // 880px
 
-// Vertical zone in the template where photos sit
-// (below the top hashtag/text block, above the couple photo)
-const PHOTOS_START_Y = 210;
-const PHOTOS_END_Y   = 1460;
-const GAP_PHOTO      = 24;
-const PHOTO_COUNT    = 3;
+const PHOTOS_START_Y = 420;
+const PHOTOS_END_Y = 1700;
+const GAP_PHOTO = 60;
+const PHOTO_COUNT = 3;
 
 const PHOTO_H = Math.floor(
   (PHOTOS_END_Y - PHOTOS_START_Y - (PHOTO_COUNT - 1) * GAP_PHOTO) / PHOTO_COUNT
-); // ≈ 404px
+); // ≈ 393px
 
 const CORNER_RADIUS = 16;
-const BORDER_W      = 4;
-const SHADOW_BLUR   = 20;
+const BORDER_W = 4;
+const SHADOW_BLUR = 20;
 const SHADOW_OFFSET = 7;
-const SHADOW_ALPHA  = 0.22;
-
-// ── Helpers ──────────────────────────────────────────────────────────────────
+const SHADOW_ALPHA = 0.22;
 
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new window.Image();
-    img.onload      = () => resolve(img);
-    img.onerror     = reject;
+    img.onload = () => resolve(img);
+    img.onerror = reject;
     img.crossOrigin = "anonymous";
-    img.src         = src;
+    img.src = src;
   });
 }
 
@@ -64,33 +58,29 @@ function roundRect(
   ctx.closePath();
 }
 
-// Draw a photo cover-fit into a rounded rect with white border + shadow.
-// biasY: 0 = top, 0.5 = center, 1 = bottom
 function drawPhoto(
   ctx: CanvasRenderingContext2D,
   img: HTMLImageElement,
   x: number, y: number, w: number, h: number,
   biasY = 0.5
 ) {
-  // Drop shadow via white border underneath
   ctx.save();
-  ctx.shadowColor   = `rgba(0,0,0,${SHADOW_ALPHA})`;
-  ctx.shadowBlur    = SHADOW_BLUR;
+  ctx.shadowColor = `rgba(0,0,0,${SHADOW_ALPHA})`;
+  ctx.shadowBlur = SHADOW_BLUR;
   ctx.shadowOffsetY = SHADOW_OFFSET;
   roundRect(ctx, x - BORDER_W, y - BORDER_W, w + BORDER_W * 2, h + BORDER_W * 2, CORNER_RADIUS + BORDER_W);
   ctx.fillStyle = "#FFFFFF";
   ctx.fill();
   ctx.restore();
 
-  // Clip & draw cover-fit
   ctx.save();
   roundRect(ctx, x, y, w, h, CORNER_RADIUS);
   ctx.clip();
 
-  const imgRatio   = img.naturalWidth / img.naturalHeight;
+  const imgRatio = img.naturalWidth / img.naturalHeight;
   const frameRatio = w / h;
-  let sw = img.naturalWidth,  sh = img.naturalHeight;
-  let sx = 0,                 sy = 0;
+  let sw = img.naturalWidth, sh = img.naturalHeight;
+  let sx = 0, sy = 0;
 
   if (imgRatio > frameRatio) {
     sw = img.naturalHeight * frameRatio;
@@ -104,21 +94,17 @@ function drawPhoto(
   ctx.restore();
 }
 
-// ── Main generator ───────────────────────────────────────────────────────────
-
 export async function generatePhotostrip(opts: StripOptions): Promise<StripResult> {
   const { photos } = opts;
 
   const canvas = document.createElement("canvas");
-  canvas.width  = STRIP_W;
+  canvas.width = STRIP_W;
   canvas.height = STRIP_H;
   const ctx = canvas.getContext("2d")!;
 
-  // ── 1. Draw the template as the full background ──────────────────────────
   const template = await loadImage("/TEMPLATE.png");
   ctx.drawImage(template, 0, 0, STRIP_W, STRIP_H);
 
-  // ── 2. Composite guest photos into the empty middle zone ─────────────────
   const photoImages = await Promise.all(photos.map(src => loadImage(src)));
 
   let photoY = PHOTOS_START_Y;
@@ -127,8 +113,7 @@ export async function generatePhotostrip(opts: StripOptions): Promise<StripResul
     if (i < PHOTO_COUNT - 1) photoY += PHOTO_H + GAP_PHOTO;
   }
 
-  // ── 3. Export ─────────────────────────────────────────────────────────────
-  const dataUrl   = canvas.toDataURL("image/png", 1.0);
+  const dataUrl = canvas.toDataURL("image/png", 1.0);
   const timestamp = new Date()
     .toISOString()
     .replace(/[-:T]/g, "")

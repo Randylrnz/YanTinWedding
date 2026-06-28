@@ -2,15 +2,15 @@
 
 @theme {
   /* Wedding Color Palette */
-  --color-burgundy:        #800020;
-  --color-burgundy-dark:   #5c0016;
-  --color-burgundy-light:  #9d0027;
-  --color-cream:           #F5F1E8;
-  --color-champagne:       #F7E7CE;
-  --color-champagne-dark:  #E8C99A;
-  --color-brown:           #6F4E37;
-  --color-brown-light:     #8B6347;
-  --color-white:           #FFFFFF;
+  --color-burgundy: #800020;
+  --color-burgundy-dark: #5c0016;
+  --color-burgundy-light: #9d0027;
+  --color-cream: #F5F1E8;
+  --color-champagne: #F7E7CE;
+  --color-champagne-dark: #E8C99A;
+  --color-brown: #6F4E37;
+  --color-brown-light: #8B6347;
+  --color-white: #FFFFFF;
 
   /* Fonts */
   --font-playfair: var(--font-playfair), 'Playfair Display', Georgia, serif;
@@ -39,8 +39,13 @@ body {
 }
 
 /* Hide scrollbars globally */
-::-webkit-scrollbar { display: none; }
-* { scrollbar-width: none; }
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  scrollbar-width: none;
+}
 
 /* Pages that need internal scrolling */
 .page-scroll {
@@ -50,20 +55,28 @@ body {
 
 /* Animated gradient background */
 @keyframes gradientDrift {
-  0%, 100% { background-position: 0% 50%; }
-  33%       { background-position: 60% 30%; }
-  66%       { background-position: 100% 70%; }
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  33% {
+    background-position: 60% 30%;
+  }
+
+  66% {
+    background-position: 100% 70%;
+  }
 }
 
 .bg-animated {
-  background: linear-gradient(
-    135deg,
-    #F8F4ED 0%,
-    #F7E7CE 25%,
-    #FAF0E0 50%,
-    #F5F1E8 75%,
-    #F7E7CE 100%
-  );
+  background: linear-gradient(135deg,
+      #F8F4ED 0%,
+      #F7E7CE 25%,
+      #FAF0E0 50%,
+      #F5F1E8 75%,
+      #F7E7CE 100%);
   background-size: 300% 300%;
   animation: gradientDrift 14s ease infinite;
 }

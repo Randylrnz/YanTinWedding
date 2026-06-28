@@ -64,14 +64,12 @@ export default function StripPage() {
     }
   }, [session, runGeneration]);
 
-  // Download the strip AND silently email it
   async function handleDownload() {
     if (!session?.stripDataUrl || !session?.stripFilename) return;
     if (downloadState !== "idle") return;
 
     setDownloadState("downloading");
 
-    // Trigger file download
     const link = document.createElement("a");
     link.href = session.stripDataUrl;
     link.download = session.stripFilename;
@@ -80,7 +78,6 @@ export default function StripPage() {
     document.body.removeChild(link);
     incrementDownload();
 
-    // Silently send email in background
     try {
       const res = await fetch("/api/send-email", {
         method: "POST",
@@ -135,8 +132,8 @@ export default function StripPage() {
         <div className="w-24 h-px bg-gradient-to-r from-transparent via-champagne-dark/60 to-transparent mt-1" />
       </motion.div>
 
-      {/* Strip image */}
-      <div className="relative z-10 flex items-center justify-center px-8 py-5 w-full flex-1">
+      {/* Strip image — centered in remaining space with top push */}
+      <div className="relative z-10 flex items-center justify-center px-8 pt-20 pb-4 w-full flex-1">
         <AnimatePresence mode="wait">
           {isGenerating ? (
             <motion.div
@@ -183,11 +180,10 @@ export default function StripPage() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ type: "spring", stiffness: 90, damping: 18, delay: 0.1 }}
             >
-              {/* Full photostrip — whole image shown */}
               <div
                 className="relative rounded-2xl overflow-hidden"
                 style={{
-                  width: "min(220px, 55vw)",
+                  width: "min(180px, 44vw)",
                   aspectRatio: "1080/2160",
                   border: "3px solid white",
                   boxShadow:
@@ -234,10 +230,10 @@ export default function StripPage() {
                     : "0 6px 24px rgba(128,0,32,0.28)",
               }}
             >
-              {downloadState === "idle"        && "Download Photostrip"}
-              {downloadState === "downloading"  && "Saving…"}
-              {downloadState === "done"         && "✓  Downloaded"}
-              {downloadState === "error"        && "Try Again"}
+              {downloadState === "idle" && "Download Photostrip"}
+              {downloadState === "downloading" && "Saving…"}
+              {downloadState === "done" && "✓  Downloaded"}
+              {downloadState === "error" && "Try Again"}
             </button>
 
             {/* Status hint after download */}
